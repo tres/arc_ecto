@@ -31,15 +31,6 @@ defmodule Arc.Ecto.Type do
     end
   end
 
-  def dump(_definition, %{file_name: file_name, updated_at: nil}) do
-    {:ok, file_name}
-  end
-
-  def dump(_definition, %{file_name: file_name, updated_at: updated_at}) do
-    gsec = :calendar.datetime_to_gregorian_seconds(Ecto.DateTime.to_erl(updated_at))
-    {:ok, "#{file_name}?#{gsec}"}
-  end
-
   def dump(_definition, %{file_name: file_name, updated_at: updated_at, saved_versions: nil}) do
     gsec = :calendar.datetime_to_gregorian_seconds(Ecto.DateTime.to_erl(updated_at))
     {:ok, "#{file_name}?#{gsec}"}
@@ -48,6 +39,15 @@ defmodule Arc.Ecto.Type do
   def dump(_definition, %{file_name: file_name, updated_at: updated_at, saved_versions: versions}) do
     gsec = :calendar.datetime_to_gregorian_seconds(Ecto.DateTime.to_erl(updated_at))
     {:ok, "#{file_name}?#{gsec}&files=#{versions}"}
+  end
+
+  def dump(_definition, %{file_name: file_name, updated_at: nil}) do
+    {:ok, file_name}
+  end
+
+  def dump(_definition, %{file_name: file_name, updated_at: updated_at}) do
+    gsec = :calendar.datetime_to_gregorian_seconds(Ecto.DateTime.to_erl(updated_at))
+    {:ok, "#{file_name}?#{gsec}"}
   end
 
   defp filename_from(value) do
